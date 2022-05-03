@@ -1,6 +1,8 @@
 import 'dart:ffi';
 import 'dart:io';
 
+int maximoVida = 50;
+
 // Função do professor
 void show() {}
 
@@ -66,15 +68,24 @@ Escolhar uma opção:
   print("Informe o valor do salário");
   double salario = double.parse(stdin.readLineSync()!);
 
-  print("Informe o valor de alteração ao salario");
+  print("Informe o valor de alteração ao salario em porcentagem");
   double variante = double.parse(stdin.readLineSync()!);
 
   String? resultado;
-
   if (escolha == 1) {
-    resultado = calculoPorcentagemAcrecimo(salario, variante);
+    resultado = verificarSalario(salario, variante, calculoPorcentagemAcrecimo);
+  } else if (escolha == 2) {
+    resultado = verificarSalario(salario, variante, calculoPorcentagemDesconto);
+  } else if (escolha == 3) {
+    resultado =
+        verificarSalario(salario, variante, calculoAcrescimoComDesconto);
   }
   print(resultado);
+}
+
+String verificarSalario(double nota1, double nota2, Function caclularNota) {
+  String nota = caclularNota(nota1, nota2);
+  return nota;
 }
 
 String calculoPorcentagemAcrecimo(double valor1, double valor2) {
@@ -85,4 +96,73 @@ String calculoPorcentagemAcrecimo(double valor1, double valor2) {
       porcentagemMiltiplicavalorFinal.toString() +
       "%";
   return valor;
+}
+
+String calculoPorcentagemDesconto(double valor1, double valor2) {
+  double porcentagemMultiplicaValor1 = valor1 * (valor2 / 100);
+  double porcentagemMultiplicaFinal = porcentagemMultiplicaValor1 / (100);
+  String valor = "O valor de decrescimo em porcentagem é de: " +
+      porcentagemMultiplicaFinal.toString() +
+      "%";
+  return valor;
+}
+
+String calculoAcrescimoComDesconto(double valor1, double valor2) {
+  double porcentagemCalculo = valor1 * ((valor2 / 100) - (10 / 100));
+  double porcentagemFinal = porcentagemCalculo / 100;
+  String valor = "O valor de acrescimo ém porcentagem é de: " +
+      porcentagemFinal.toString() +
+      "%";
+  return valor;
+}
+
+//Função meu projeto
+
+showMeuProjeto() {
+  print('''Escolha uma opção:
+  01 - Recupera vida
+  02 - Calcula dano
+  03 - Almenta vida limite''');
+
+  int opcao = int.parse(stdin.readLineSync()!);
+
+  print("Informe o valor da vida");
+  int vida = int.parse(stdin.readLineSync()!);
+
+  print("Informe o valor variante da vida");
+  int varianteVida = int.parse(stdin.readLineSync()!);
+
+  String resultado;
+
+  if (opcao == 1) {
+    resultado = escolhaFeitaRpg(vida, varianteVida, restaurarVida);
+  } else if (opcao == 2) {
+    resultado = escolhaFeitaRpg(vida, varianteVida, tirarVida);
+  } else if (opcao == 3) {
+    resultado = escolhaFeitaRpg(vida, varianteVida, bonificarViada);
+  }
+
+  print(opcao);
+}
+
+String escolhaFeitaRpg(int vida, int varianteVida, Function opcao) {
+  String retorno = opcao(vida, varianteVida);
+  return retorno;
+}
+
+String restaurarVida(int vida, int varianteVida) {
+  int calculo = vida + varianteVida;
+  return calculo.toString();
+}
+
+String tirarVida(int vida, int varianteVida) {
+  int calculo = vida - varianteVida;
+  return calculo.toString();
+}
+
+String bonificarViada(int vida, int varianteVida) {
+  int calculo = vida + varianteVida;
+  maximoVida = calculo;
+  String maximoVidaMensagem = "Sua vida máxima é de: " + maximoVida.toString();
+  return maximoVidaMensagem;
 }
